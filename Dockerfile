@@ -10,6 +10,6 @@ RUN npm install -g ts-node
 
 RUN npm run build
 
-EXPOSE 1337
+EXPOSE 8080
 
 CMD ["npm", "start"]
