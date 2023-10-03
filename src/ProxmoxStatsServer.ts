@@ -28,6 +28,8 @@ export default class ProxmoxStatsServer {
 
 				let totalCpu: number = 0.0;
 
+				let onlineNodes = 0;
+
 				console.log("Fetching " + proxmoxSettings.host + "api2/json/cluster/resources");
 				const status = await axios.get(proxmoxSettings.host + "api2/json/cluster/resources", {
 					headers: {
@@ -39,13 +41,12 @@ export default class ProxmoxStatsServer {
 					console.log(obj);
 					if (obj.type == "storage") {
 						totalDiskMax += obj.maxdisk;
-						totalDiskCurrent += obj.disk;
+						totalDiskCurrent += obj.disk == null ? 0 : obj.disk;
 					} else if (obj.type == "node") {
 						totalMemMax += obj.maxmem;
-						totalMemCurrent += obj.mem;
+						totalMemCurrent += obj.mem == null ? 0 : obj.mem;
 
-						totalCpu += obj.cpu;
-
+						totalCpu += obj.cpu == null ? 0 : obj.cpu;
 
 						const nodeData = {
 							name: obj.node,
@@ -62,13 +63,18 @@ export default class ProxmoxStatsServer {
 								usage: obj.cpu
 							},
 							online: obj.status == "online"
+						};
+
+						if (obj.status == "online") {
+							onlineNodes++;
 						}
+
 						nodes.push(nodeData);
 					}
 				});
 
 				let avgCpu = 0.0;
-				if (nodes.length > 0) {
+				if (onlineNodes > 0) {
 					avgCpu = totalCpu / nodes.length;
 				}
 
