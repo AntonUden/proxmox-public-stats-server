@@ -36,10 +36,11 @@ export default class ProxmoxStatsServer {
 				});
 
 				status.data.data.forEach((obj: any) => {
-					if (obj.type == "node") {
+					console.log(obj);
+					if (obj.type == "storage") {
 						totalDiskMax += obj.maxdisk;
 						totalDiskCurrent += obj.disk;
-
+					} else if (obj.type == "node") {
 						totalMemMax += obj.maxmem;
 						totalMemCurrent += obj.mem;
 
