@@ -30,7 +30,7 @@ export default class ProxmoxStatsServer {
 
 				let onlineNodes = 0;
 
-				console.log("Fetching " + proxmoxSettings.host + "api2/json/cluster/resources");
+				//console.log("Fetching " + proxmoxSettings.host + "api2/json/cluster/resources");
 				const status = await axios.get(proxmoxSettings.host + "api2/json/cluster/resources", {
 					headers: {
 						Authorization: `PVEAPIToken=${proxmoxSettings.tokenId}=${proxmoxSettings.apiKey}`,
@@ -38,7 +38,7 @@ export default class ProxmoxStatsServer {
 				});
 
 				status.data.data.forEach((obj: any) => {
-					console.log(obj);
+					//console.log(obj);
 					if (obj.type == "storage") {
 						totalDiskMax += obj.maxdisk;
 						totalDiskCurrent += obj.disk == null ? 0 : obj.disk;
@@ -94,8 +94,8 @@ export default class ProxmoxStatsServer {
 					nodes: nodes
 				});
 			} catch (err) {
-				console.warn("Failed to process request");
-				console.error(err);
+				//console.warn("Failed to process request");
+				//console.error(err);
 				res.status(503).send("An error occured while trying to fetch stats");
 			}
 		});
